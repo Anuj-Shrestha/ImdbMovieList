@@ -1,9 +1,12 @@
 package com.example.anuj.imdbmovielist;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton imageButton;
     private EditText editText;
     private String searchQuery;
+    private ArrayList<Search> myMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CallRetrofit(String searchParam) {
+
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://www.omdbapi.com")
                 .addConverterFactory(GsonConverterFactory.create());
@@ -79,8 +84,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
 
                 ArrayList<Search> movies = new ArrayList(response.body().getSearch());
+                myMovies = movies;
 
                 listView.setAdapter(new GitHubRepoAdapter(MainActivity.this, movies));
+
             }
 
             @Override

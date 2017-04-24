@@ -1,9 +1,12 @@
 package com.example.anuj.imdbmovielist;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -36,11 +39,23 @@ public class GitHubRepoAdapter extends ArrayAdapter<Search> {
         }
 
         TextView textView = (TextView) row.findViewById(R.id.textview_listitem);
+        TextView year = (TextView) row.findViewById(R.id.textview_year);
 
-        Search item = values.get(position);
+        final Search item = values.get(position);
         String message = item.getTitle();
-        textView.setText(message);
+        String yearReleased = item.getYear();
 
+        textView.setText(message);
+        year.setText(yearReleased);
+
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MovieDetail.class);
+                intent.putExtra("MovieDetail", item);
+                context.startActivity(intent);
+            }
+        });
         return row;
     }
 }
