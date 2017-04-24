@@ -1,5 +1,8 @@
 package com.example.anuj.imdbmovielist;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,10 +10,15 @@ import java.util.List;
  */
 
 public class MovieResponse {
-    private String title;
 
+    @SerializedName("Search")
+    public  ArrayList<Search> Search;
 
-    public String getTitle() {
-        return title;
+    public void setSearch (ArrayList<Search> Search) {
+        this.Search = Search;
+    }
+
+    public ArrayList<Search> getSearch () {
+        return Search;
     }
 }

@@ -13,5 +13,5 @@ import retrofit2.http.Query;
 
 public interface ImdbClient {
     @GET("/")
-    Call<GitHubRepo> reposForUser(@Query("s") String name);
+    Call<MovieResponse> reposForUser(@Query("s") String name);
 }

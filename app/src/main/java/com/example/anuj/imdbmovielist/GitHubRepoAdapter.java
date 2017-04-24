@@ -8,17 +8,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by anuj on 4/20/17.
  */
-public class GitHubRepoAdapter extends ArrayAdapter<GitHubRepo> {
+public class GitHubRepoAdapter extends ArrayAdapter<Search> {
 
     private Context context;
-    private List<GitHubRepo> values;
+    private ArrayList<Search> values;
 
-    public GitHubRepoAdapter(Context context, List<GitHubRepo> values) {
+    public GitHubRepoAdapter(Context context, ArrayList<Search> values) {
         super(context, R.layout.list_item, values);
 
         this.context = context;
@@ -36,8 +37,8 @@ public class GitHubRepoAdapter extends ArrayAdapter<GitHubRepo> {
 
         TextView textView = (TextView) row.findViewById(R.id.textview_listitem);
 
-        GitHubRepo item = values.get(position);
-        String message = item.getName();
+        Search item = values.get(position);
+        String message = item.getTitle();
         textView.setText(message);
 
         return row;

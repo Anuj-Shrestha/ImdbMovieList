@@ -2,9 +2,12 @@ package com.example.anuj.imdbmovielist;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,25 +27,29 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listview_githubrepos);
 
+
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
+                .baseUrl("http://www.omdbapi.com")
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();
 
-        GithubClient client = retrofit.create(GithubClient.class);
-        Call<List<GitHubRepo>> call = client.reposForUser("fs-opensource");
+        // Creating an object of our api interface
+        ImdbClient client = retrofit.create(ImdbClient.class);
 
-        call.enqueue(new Callback<List<GitHubRepo>>() {
+        Call<MovieResponse> call = client.reposForUser("hulk");
+
+        call.enqueue(new Callback<MovieResponse>() {
             @Override
-            public void onResponse(Call<List<GitHubRepo>> call, Response<List<GitHubRepo>> response) {
-                List<GitHubRepo> repos = response.body();
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
 
-                listView.setAdapter(new GitHubRepoAdapter(MainActivity.this, repos));
+                ArrayList<Search> movies = new ArrayList(response.body().getSearch());
+
+                listView.setAdapter(new GitHubRepoAdapter(MainActivity.this, movies));
             }
 
             @Override
-            public void onFailure(Call<List<GitHubRepo>> call, Throwable t) {
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "error happen ", Toast.LENGTH_LONG).show();
             }
         });
