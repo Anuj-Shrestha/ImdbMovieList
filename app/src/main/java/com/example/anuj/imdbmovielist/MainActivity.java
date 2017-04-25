@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CallRetrofit(String searchParam) {
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+
 
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://www.omdbapi.com")
@@ -82,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
                 ArrayList<Search> movies = new ArrayList(response.body().getSearch());
                 myMovies = movies;
