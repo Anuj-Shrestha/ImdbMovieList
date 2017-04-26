@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_marginBottom="1dp"
+    android:padding="4dp"
+    android:elevation="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,13 +15,15 @@
         <TextView
             android:id="@+id/textview_listitem"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            style="@style/LargeText"/>
 
         <TextView
             android:id="@+id/textview_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            style="@style/SmallText"/>
     </RelativeLayout>
 
 </LinearLayout>

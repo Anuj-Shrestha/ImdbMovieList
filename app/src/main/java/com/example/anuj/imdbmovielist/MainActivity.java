@@ -12,6 +12,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,14 +86,12 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-
                 findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
                 ArrayList<Search> movies = new ArrayList(response.body().getSearch());
                 myMovies = movies;
 
                 listView.setAdapter(new GitHubRepoAdapter(MainActivity.this, movies));
-
             }
 
             @Override
