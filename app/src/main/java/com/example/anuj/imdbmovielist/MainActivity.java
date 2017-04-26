@@ -17,6 +17,9 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,9 +74,13 @@ public class MainActivity extends AppCompatActivity {
     public void CallRetrofit(String searchParam) {
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient okclient = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://www.omdbapi.com")
+                .client(okclient)
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();
