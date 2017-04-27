@@ -47,7 +47,6 @@ public class MovieDetail extends AppCompatActivity {
 
 
         Search clickedMovie = (Search) getIntent().getSerializableExtra("MovieDetail");
-        String movieposter = clickedMovie.getUri();
 
 //        GetImage getImageCall = new GetImage(poster, spinner);
 //        getImageCall.execute(clickedMovie.getUri());

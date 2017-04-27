@@ -62,12 +62,30 @@
                 android:indeterminate="true" />
         </RelativeLayout>
 
-
-        <ListView
-            android:id="@+id/listview_githubrepos"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_movieList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <!--<GridView xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--android:id="@+id/gridView_movielist"-->
+            <!--android:numColumns="2"-->
+            <!--android:gravity="center"-->
+            <!--android:columnWidth="50pt"-->
+            <!--android:stretchMode="columnWidth"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent" >-->
+
+        <!--</GridView>-->
+
+
+        <!--<ListView-->
+            <!--android:id="@+id/listview_githubrepos"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="8dp"/>-->
 
     </LinearLayout>
 

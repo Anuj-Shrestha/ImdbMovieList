@@ -3,11 +3,14 @@ package com.example.anuj.imdbmovielist;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -28,18 +31,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView listView;
+//    private GridView gridView;
     private ImageButton imageButton;
     private EditText editText;
     private String searchQuery;
     private ArrayList<Search> myMovies;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = (ListView) findViewById(R.id.listview_githubrepos);
+//        listView = (ListView) findViewById(R.id.listview_githubrepos);
+//        gridView = (GridView) findViewById(R.id.gridView_movielist);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_movieList);
         imageButton = (ImageButton) findViewById(R.id.imagebutton_search);
         editText = (EditText) findViewById(R.id.edittext_search);
 
@@ -98,7 +104,11 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<Search> movies = new ArrayList(response.body().getSearch());
                 myMovies = movies;
 
-                listView.setAdapter(new GitHubRepoAdapter(MainActivity.this, movies));
+//                listView.setAdapter(new GitHubRepoAdapter(MainActivity.this, movies));
+//                gridView.setAdapter(new GitHubRepoAdapter(MainActivity.this, movies));
+                int numberOfColumns = 2;
+                recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, numberOfColumns));
+                recyclerView.setAdapter(new GitHubRepoAdapter(MainActivity.this, movies));
             }
 
             @Override
