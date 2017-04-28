@@ -2,18 +2,11 @@ package com.example.anuj.imdbmovielist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,23 +16,27 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by anuj on 4/20/17.
  */
-public class GitHubRepoAdapter extends RecyclerView.Adapter<GitHubRepoAdapter.ViewHolder> {
+public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<Search> values;
+    private ArrayList<Results> values;
     private LayoutInflater mInflater;
-    private Search movieItem;
+    private Results movieItem;
 
 
-    public GitHubRepoAdapter(Context context, ArrayList<Search> values) {
+    public MovieListAdapter(Context context, ArrayList<Results> values) {
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.values = values;
+    }
+
+    public void setValues(ArrayList<Results> values) {
+        this.values = values;
+        notifyDataSetChanged();
     }
 
     // inflates the cell layout from xml when needed
@@ -53,7 +50,7 @@ public class GitHubRepoAdapter extends RecyclerView.Adapter<GitHubRepoAdapter.Vi
     // binds the data to the textview in each cell
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Search item = values.get(position);
+        Results item = values.get(position);
         movieItem = item;
         String message = item.getTitle();
         String yearReleased = item.getYear();
@@ -61,7 +58,7 @@ public class GitHubRepoAdapter extends RecyclerView.Adapter<GitHubRepoAdapter.Vi
         holder.textView.setText(message);
         holder.year.setText(yearReleased);
         Glide.with(context)
-                .load(item.getUri())
+                .load("http://image.tmdb.org/t/p/w185/" + item.getPoster())
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -85,7 +82,7 @@ public class GitHubRepoAdapter extends RecyclerView.Adapter<GitHubRepoAdapter.Vi
     }
 
     // convenience method for getting data at click position
-    public Search getItem(int id) {
+    public Results getItem(int id) {
         return values.get(id);
     }
 

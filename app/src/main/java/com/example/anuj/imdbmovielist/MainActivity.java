@@ -1,6 +1,5 @@
 package com.example.anuj.imdbmovielist;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,18 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.List;
-
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -35,8 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton imageButton;
     private EditText editText;
     private String searchQuery;
-    private ArrayList<Search> myMovies;
+    private ArrayList<Results> myMovies;
     private RecyclerView recyclerView;
+    private MovieListAdapter movieListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_movieList);
         imageButton = (ImageButton) findViewById(R.id.imagebutton_search);
         editText = (EditText) findViewById(R.id.edittext_search);
+
+        myMovies = new ArrayList<>();
+
+        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+        movieListAdapter = new MovieListAdapter(MainActivity.this, myMovies);
+        recyclerView.setAdapter(movieListAdapter);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,44 +77,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CallRetrofit(String searchParam) {
-        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+//        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient okclient = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://www.omdbapi.com")
-                .client(okclient)
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-
-        // Creating an object of our api interface
-        ImdbClient client = retrofit.create(ImdbClient.class);
-
-        Call<MovieResponse> call = client.reposForUser(searchParam);
-
-        call.enqueue(new Callback<MovieResponse>() {
+        RetrofitManager.getInstance().getPopularMovies(new Callback<TmdbResponse>() {
             @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+            public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
 
-                ArrayList<Search> movies = new ArrayList(response.body().getSearch());
-                myMovies = movies;
+                if (response.code() == 200) {
+                    ArrayList<Results> movies = new ArrayList(response.body().getResults());
+                    myMovies = movies;
+                    movieListAdapter.setValues(movies);
 
-//                listView.setAdapter(new GitHubRepoAdapter(MainActivity.this, movies));
-//                gridView.setAdapter(new GitHubRepoAdapter(MainActivity.this, movies));
-                int numberOfColumns = 2;
-                recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, numberOfColumns));
-                recyclerView.setAdapter(new GitHubRepoAdapter(MainActivity.this, movies));
+                }else{
+//                    Log.i(TAG, "onResponse: " + response);
+                    Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
+            public void onFailure(Call<TmdbResponse> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "error happen ", Toast.LENGTH_LONG).show();
             }
         });
+
     }
 
 }

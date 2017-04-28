@@ -1,29 +1,28 @@
 package com.example.anuj.imdbmovielist;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
+import java.util.ArrayList;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MovieDetail extends AppCompatActivity {
     TextView title, type, year, imdbid, imageUri;
@@ -46,13 +45,18 @@ public class MovieDetail extends AppCompatActivity {
         miniposterspinner = (RelativeLayout) findViewById(R.id.loadingPanel_miniposter);
 
 
-        Search clickedMovie = (Search) getIntent().getSerializableExtra("MovieDetail");
+        Results clickedMovie = getIntent().getParcelableExtra("MovieDetail");
+        Log.i("clickedmovie title", clickedMovie.getTitle());
+        Log.i("clickedmovie image", clickedMovie.getBackdrop());
+        Log.i("clickedmovie overview", clickedMovie.getOverview());
+        Log.i("clickedmovie vote", clickedMovie.getVote());
+        Log.i("clickedmovie year", clickedMovie.getYear());
 
 //        GetImage getImageCall = new GetImage(poster, spinner);
 //        getImageCall.execute(clickedMovie.getUri());
 //        Glide.with(this).load(clickedMovie.getUri()).into(poster);
         Glide.with(this)
-                .load(clickedMovie.getUri())
+                .load("http://image.tmdb.org/t/p/w185/" + clickedMovie.getBackdrop())
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -73,7 +77,7 @@ public class MovieDetail extends AppCompatActivity {
 //        new GetImage(miniPoster, miniposterspinner).execute(clickedMovie.getUri());
 //        Glide.with(this).load(clickedMovie.getUri()).into(miniPoster);
         Glide.with(this)
-                .load(clickedMovie.getUri())
+                .load("http://image.tmdb.org/t/p/w185/" + clickedMovie.getPoster())
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -89,11 +93,36 @@ public class MovieDetail extends AppCompatActivity {
                 })
                 .into(miniPoster);
         year.setText("Year: " + clickedMovie.getYear());
-        type.setText("Type: " + clickedMovie.getType());
-        imdbid.setText("Imdb ID: " + clickedMovie.getImdbID());
-        imageUri.setText("Image URL: " + clickedMovie.getUri());
+        type.setText("Overview: " + clickedMovie.getOverview());
+        imdbid.setText("ID: " + clickedMovie.getId());
+        imageUri.setText("Vote: " + clickedMovie.getVote());
 
-        Log.i("sent data", clickedMovie.getTitle());
+        CallRetrofit(clickedMovie.getId());
+
+    }
+    public void CallRetrofit(String id) {
+
+        RetrofitManager.getInstance().getMovieDetail(new Callback<TmdbResponse>() {
+            @Override
+            public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
+
+                if (response.code() == 200) {
+                    ArrayList<Results> videos = new ArrayList(response.body().getResults());
+                    Log.d("test", videos.get(0).getName());
+
+                }else{
+//                    Log.i(TAG, "onResponse: " + response);
+                    Toast.makeText(MovieDetail.this, response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TmdbResponse> call, Throwable t) {
+                Toast.makeText(MovieDetail.this, "error happen ", Toast.LENGTH_LONG).show();
+            }
+        }, id);
+
+
 
     }
 }
