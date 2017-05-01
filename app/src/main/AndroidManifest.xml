@@ -17,8 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MovieDetail" />
-        <activity android:name=".CollapsableExample"></activity>
+        <activity android:name=".MovieDetailActivity" />
+        <activity android:name=".CollapsableExampleActivity"></activity>
     </application>
 
 </manifest>

@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -13,13 +12,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Perform action on key press
                     searchQuery = editText.getText().toString();
-                    CallRetrofit(searchQuery);
+                    searchPopularMovies(searchQuery);
                     return true;
                 }
                 return false;
@@ -71,12 +66,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         searchQuery = "a";
-        CallRetrofit(searchQuery);
+        searchPopularMovies(searchQuery);
 
 
     }
 
-    public void CallRetrofit(String searchParam) {
+    public void searchPopularMovies(String searchParam) {
 //        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
         RetrofitManager.getInstance().getPopularMovies(new Callback<TmdbResponse>() {

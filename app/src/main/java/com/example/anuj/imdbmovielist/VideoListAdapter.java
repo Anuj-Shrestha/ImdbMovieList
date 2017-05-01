@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by anuj on 4/20/17.
  */
-public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
+public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<Results> values;
@@ -28,7 +28,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     private Results movieItem;
 
 
-    public MovieListAdapter(Context context, ArrayList<Results> values) {
+    public VideoListAdapter(Context context, ArrayList<Results> values) {
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.values = values;
@@ -42,7 +42,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     // inflates the cell layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.list_item, parent, false);
+        View view = mInflater.inflate(R.layout.video_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -52,28 +52,28 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Results item = values.get(position);
         movieItem = item;
-        String message = item.getTitle();
-        String yearReleased = item.getYear();
+        String name = item.getName();
+        String key = item.getKey();
 
-        holder.textView.setText(message);
-        holder.year.setText(yearReleased);
-        Glide.with(context)
-                .load("http://image.tmdb.org/t/p/w185/" + item.getPoster())
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        holder.spinner.setVisibility(View.GONE);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        holder.spinner.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
-                .skipMemoryCache( true )
-                .into(holder.listMoviePoster);
+        holder.textView.setText(name);
+        holder.year.setText(key);
+//        Glide.with(context)
+//                .load("http://image.tmdb.org/t/p/w185/" + item.getPoster())
+//                .listener(new RequestListener<String, GlideDrawable>() {
+//                    @Override
+//                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                        holder.spinnerRelativeLayout.setVisibility(View.GONE);
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                        holder.spinnerRelativeLayout.setVisibility(View.GONE);
+//                        return false;
+//                    }
+//                })
+//                .skipMemoryCache( true )
+//                .into(holder.listMoviePoster);
     }
 
     @Override
@@ -98,14 +98,14 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
             year = (TextView) row.findViewById(R.id.textview_year);
             listMoviePoster = (ImageView) row.findViewById(R.id.imageview_listposter);
             spinner = (RelativeLayout) row.findViewById(R.id.relativelayout_spinner);
-            row.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, MovieDetailActivity.class);
-                    intent.putExtra("MovieDetailActivity", getItem(getAdapterPosition()));
-                    context.startActivity(intent);
-                }
-            });
+//            row.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(context, MovieDetailActivity.class);
+//                    intent.putExtra("MovieDetailActivity", getItem(getAdapterPosition()));
+//                    context.startActivity(intent);
+//                }
+//            });
         }
     }
 }

@@ -14,11 +14,11 @@ import java.io.InputStream;
  * Created by anuj on 4/25/17.
  */
 
-public class GetImage extends AsyncTask<String, Void, Bitmap> {
+public class GetImageAsyncTask extends AsyncTask<String, Void, Bitmap> {
     ImageView imageView;
     View spinner;
 
-    public GetImage(ImageView imageView, View spinner) {
+    public GetImageAsyncTask(ImageView imageView, View spinner) {
         this.imageView = imageView;
         this.spinner = spinner;
     }
