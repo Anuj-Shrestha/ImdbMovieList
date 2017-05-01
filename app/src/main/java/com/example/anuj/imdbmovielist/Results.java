@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Results implements Parcelable {
 
-    @SerializedName("titleTextView")
+    @SerializedName("title")
     private String title;
 
     @SerializedName("release_date")

@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,25 +19,23 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-//    private GridView gridView;
     private ImageButton imageButton;
     private EditText editText;
     private String searchQuery;
     private ArrayList<Results> myMovies;
     private RecyclerView recyclerView;
     private MovieListAdapter movieListAdapter;
+    private RelativeLayout spinnerRelativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        listView = (ListView) findViewById(R.id.listview_githubrepos);
-//        gridView = (GridView) findViewById(R.id.gridView_movielist);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_movieList);
         imageButton = (ImageButton) findViewById(R.id.imagebutton_search);
         editText = (EditText) findViewById(R.id.edittext_search);
-
+        spinnerRelativeLayout = (RelativeLayout) findViewById(R.id.relativelayout_loadingPanel);
         myMovies = new ArrayList<>();
 
         recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
@@ -72,11 +71,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void searchPopularMovies(String searchParam) {
-//        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
         RetrofitManager.getInstance().getPopularMovies(new Callback<TmdbResponse>() {
             @Override
             public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
+                spinnerRelativeLayout.setVisibility(View.GONE);
 
                 if (response.code() == 200) {
                     ArrayList<Results> movies = new ArrayList(response.body().getResults());
@@ -84,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                     movieListAdapter.setValues(movies);
 
                 }else{
-//                    Log.i(TAG, "onResponse: " + response);
                     Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }

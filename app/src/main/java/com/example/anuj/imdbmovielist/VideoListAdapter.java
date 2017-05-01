@@ -1,7 +1,11 @@
 package com.example.anuj.imdbmovielist;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +20,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by anuj on 4/20/17.
@@ -26,16 +31,20 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
     private ArrayList<Results> values;
     private LayoutInflater mInflater;
     private Results movieItem;
+    private String backDropUri;
+    private ItemClickListener mClickListener;
 
 
-    public VideoListAdapter(Context context, ArrayList<Results> values) {
+    public VideoListAdapter(Context context, ArrayList<Results> values, String backDropUri) {
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.values = values;
+        this.backDropUri = backDropUri;
     }
 
-    public void setValues(ArrayList<Results> values) {
+    public void setValues(ArrayList<Results> values, String backDropUri) {
         this.values = values;
+        this.backDropUri = backDropUri;
         notifyDataSetChanged();
     }
 
@@ -55,25 +64,23 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         String name = item.getName();
         String key = item.getKey();
 
-        holder.textView.setText(name);
-        holder.year.setText(key);
-//        Glide.with(context)
-//                .load("http://image.tmdb.org/t/p/w185/" + item.getPoster())
-//                .listener(new RequestListener<String, GlideDrawable>() {
-//                    @Override
-//                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-//                        holder.spinnerRelativeLayout.setVisibility(View.GONE);
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                        holder.spinnerRelativeLayout.setVisibility(View.GONE);
-//                        return false;
-//                    }
-//                })
-//                .skipMemoryCache( true )
-//                .into(holder.listMoviePoster);
+        holder.videoNameTextView.setText(name);
+        holder.youtubeKeyTextView.setText(key);
+        Glide.with(context)
+                .load("http://image.tmdb.org/t/p/w185/" + backDropUri)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        return false;
+                    }
+                })
+                .skipMemoryCache( true )
+                .into(holder.listMoviePoster);
     }
 
     @Override
@@ -86,26 +93,45 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
         return values.get(id);
     }
 
+    // allows clicks events to be caught
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView, year;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView videoNameTextView, youtubeKeyTextView;
         public ImageView listMoviePoster;
         public RelativeLayout spinner;
 
+
         public ViewHolder(View row) {
             super(row);
-            textView = (TextView) row.findViewById(R.id.textview_listitem);
-            year = (TextView) row.findViewById(R.id.textview_year);
+            videoNameTextView = (TextView) row.findViewById(R.id.textview_listitem);
+            youtubeKeyTextView = (TextView) row.findViewById(R.id.textview_year);
             listMoviePoster = (ImageView) row.findViewById(R.id.imageview_listposter);
             spinner = (RelativeLayout) row.findViewById(R.id.relativelayout_spinner);
+            row.setOnClickListener(this);
 //            row.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//                    Intent intent = new Intent(context, MovieDetailActivity.class);
-//                    intent.putExtra("MovieDetailActivity", getItem(getAdapterPosition()));
+//                    Intent intent = new Intent(Intent.ACTION_VIEW);
+//                    intent.setData(Uri.parse("https://www.youtube.com/watch?v="+ getItem(getAdapterPosition()).getKey()));
+//                    intent.setPackage("com.google.android.youtube");
 //                    context.startActivity(intent);
 //                }
 //            });
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 }
