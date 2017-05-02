@@ -1,5 +1,6 @@
 package com.example.anuj.imdbmovielist;
 
+import android.app.Dialog;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -49,12 +52,13 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements YouTubeP
     YouTubePlayer myYoutubePlayer;
     RatingBar mRatingBar;
     String releasedDate;
+    Dialog dialog;
 
     public static final String DEVELOPER_KEY = "AIzaSyCXki-uq3pciNSAUPiuxpXhRrXvvrV-S2o";
     private static final int RECOVERY_DIALOG_REQUEST = 1;
-    private static final String VIDEO_ID = "fhWaJi1Hsfo";
 
     YouTubePlayerFragment myYouTubePlayerFragment;
+//    YouTubePlayerFragment myPopupYTFragment;
 
 
     @Override
@@ -139,6 +143,13 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements YouTubeP
 
         getMovieDetail(clickedMovie.getId(), clickedMovie.getBackdrop());
 
+        dialog = new Dialog(this);
+
+        dialog.setContentView(R.layout.popup_video);
+        dialog.setTitle("Custom Alert Dialog");
+
+//        myPopupYTFragment = (YouTubePlayerFragment) getFragmentManager()
+//                .findFragmentById(R.id.fragment_videoPlayer);
     }
 
     public void getMovieDetail(String id, final String backDropUri) {
@@ -153,6 +164,7 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements YouTubeP
                     videoId = vidoes.get(0).getKey();
                     if (myYoutubePlayer == null) {
                         myYouTubePlayerFragment.initialize(DEVELOPER_KEY, MovieDetailActivity.this);
+
                     } else {
                         myYoutubePlayer.cueVideo(videoId);
                     }
@@ -178,8 +190,12 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements YouTubeP
         videoId = videoListAdapter.getItem(position).getKey();
         if (myYoutubePlayer == null) {
             myYouTubePlayerFragment.initialize(DEVELOPER_KEY, MovieDetailActivity.this);
+//            myPopupYTFragment.initialize(DEVELOPER_KEY, MovieDetailActivity.this);
+//            dialog.show();
+
         } else {
             myYoutubePlayer.cueVideo(videoId);
+//            dialog.show();
         }
     }
 
