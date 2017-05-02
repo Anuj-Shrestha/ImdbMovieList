@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,24 +25,30 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.R.attr.format;
+
 public class MovieDetailActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener, VideoListAdapter.ItemClickListener {
-    TextView titleTextView, movieTypeTextView, yearTextView, imdbIdTextView, imageUriTextView;
+    TextView titleTextView, movieTypeTextView, yearTextView, imdbIdTextView;
     ImageView posterImageView, miniPosterImageView;
     RelativeLayout spinnerRelativeLayout, miniPosterSpinnerRL;
     RecyclerView recyclerView;
     ArrayList<Results> myVideos;
     VideoListAdapter videoListAdapter;
-    VideoView trailerVideoView;
     String backDropUri;
-    String firstVideoSrc;
     String videoId;
     YouTubePlayer myYoutubePlayer;
+    RatingBar mRatingBar;
+    String releasedDate;
 
     public static final String DEVELOPER_KEY = "AIzaSyCXki-uq3pciNSAUPiuxpXhRrXvvrV-S2o";
     private static final int RECOVERY_DIALOG_REQUEST = 1;
@@ -60,7 +67,7 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements YouTubeP
         yearTextView = (TextView) findViewById(R.id.textview_year);
         imdbIdTextView = (TextView) findViewById(R.id.textview_imdbid);
         posterImageView = (ImageView) findViewById(R.id.imageview_poster);
-        imageUriTextView = (TextView) findViewById(R.id.textview_imageUri);
+        mRatingBar = (RatingBar) findViewById(R.id.ratingBar_movieRating);
         miniPosterImageView = (ImageView) findViewById(R.id.imageview_miniPoster);
         spinnerRelativeLayout = (RelativeLayout) findViewById(R.id.loadingPanel_poster);
         miniPosterSpinnerRL = (RelativeLayout) findViewById(R.id.loadingPanel_miniposter);
@@ -113,10 +120,22 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements YouTubeP
                     }
                 })
                 .into(miniPosterImageView);
-        yearTextView.setText("Year: " + clickedMovie.getYear());
-        movieTypeTextView.setText("Overview: " + clickedMovie.getOverview());
+        DateFormat getDate = new SimpleDateFormat("yyyy-MM-DD");
+        try {
+            Date convertedDate = getDate.parse(clickedMovie.getYear());
+            SimpleDateFormat newFormat = new SimpleDateFormat("d MMM yyyy");
+            releasedDate = newFormat.format(convertedDate);
+            System.out.println("helloworld" + releasedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        yearTextView.setText("Released Date: " + releasedDate);
+
+        movieTypeTextView.setText(clickedMovie.getOverview());
         imdbIdTextView.setText("ID: " + clickedMovie.getId());
-        imageUriTextView.setText("Vote: " + clickedMovie.getVote());
+        mRatingBar.setRating(Float.parseFloat(clickedMovie.getVote()));
+
 
         getMovieDetail(clickedMovie.getId(), clickedMovie.getBackdrop());
 
@@ -156,8 +175,6 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements YouTubeP
 
     @Override
     public void onItemClick(View view, int position) {
-        Log.i("TAG", "You clicked number " + videoListAdapter.getItem(position) + ", which is at cell position " + position);
-        Log.i("clickedmovie vote", videoListAdapter.getItem(position).getKey());
         videoId = videoListAdapter.getItem(position).getKey();
         if (myYoutubePlayer == null) {
             myYouTubePlayerFragment.initialize(DEVELOPER_KEY, MovieDetailActivity.this);

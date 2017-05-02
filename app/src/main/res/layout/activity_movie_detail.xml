@@ -117,6 +117,16 @@
                         android:paddingBottom="8dp"
                         android:text="Movie" />
 
+                    <RatingBar
+                        android:id="@+id/ratingBar_movieRating"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:isIndicator="true"
+                        android:numStars="10"
+                        android:stepSize="0.1"
+                        android:paddingBottom="8dp"/>
+
                     <TextView
                         android:id="@+id/textview_year"
                         android:layout_width="wrap_content"
@@ -131,28 +141,23 @@
                         android:paddingBottom="8dp"
                         android:text="Imdb Id" />
 
-                    <TextView
-                        android:id="@+id/textview_imageUri"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
-                        android:text="image url" />
                 </LinearLayout>
 
             </LinearLayout>
+
             <TextView
+                style="@style/LargeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/LargeText"
-                android:text="Youtube Trailers:"
+                android:paddingBottom="4dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="4dp"/>
+                android:text="Youtube Trailers:" />
 
             <fragment
                 android:id="@+id/fragment_youtubePlayer"
+                android:name="com.google.android.youtube.player.YouTubePlayerFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:name="com.google.android.youtube.player.YouTubePlayerFragment" />
+                android:layout_height="match_parent" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView_videoList"

@@ -40,12 +40,42 @@
                     android:src="@drawable/ic_search_black_24dp" />
             </RelativeLayout>
 
-            <EditText
-                android:id="@+id/edittext_search"
+
+            <LinearLayout
+                android:id="@+id/linearLayout_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter search query (Movie Title)"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/edittext_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter search query (Movie Title)"
+                     />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/button_popular"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Popular" />
+
+                    <Button
+                        android:id="@+id/button_upcoming"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Upcoming" />
+                </LinearLayout>
+
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -68,24 +98,6 @@
             android:layout_height="wrap_content">
 
         </android.support.v7.widget.RecyclerView>
-
-        <!--<GridView xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--android:id="@+id/gridView_movielist"-->
-            <!--android:numColumns="2"-->
-            <!--android:gravity="center"-->
-            <!--android:columnWidth="50pt"-->
-            <!--android:stretchMode="columnWidth"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="fill_parent" >-->
-
-        <!--</GridView>-->
-
-
-        <!--<ListView-->
-            <!--android:id="@+id/listview_githubrepos"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="8dp"/>-->
 
     </LinearLayout>
 

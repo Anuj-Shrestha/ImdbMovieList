@@ -7,8 +7,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MovieListAdapter movieListAdapter;
     private RelativeLayout spinnerRelativeLayout;
+    private Button popularButton, upcomingButton;
+    private LinearLayout searchLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +47,14 @@ public class MainActivity extends AppCompatActivity {
         movieListAdapter = new MovieListAdapter(MainActivity.this, myMovies);
         recyclerView.setAdapter(movieListAdapter);
 
+        popularButton = (Button) findViewById(R.id.button_popular);
+        upcomingButton = (Button) findViewById(R.id.button_upcoming);
+        searchLinearLayout = (LinearLayout) findViewById(R.id.linearLayout_search);
+
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                editText.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(MainActivity.this, LifecycleExampleActivity.class);
-                startActivity(intent);
+                searchLinearLayout.setVisibility(View.VISIBLE);
             }
         });
 
@@ -60,13 +66,32 @@ public class MainActivity extends AppCompatActivity {
                     // Perform action on key press
                     searchQuery = editText.getText().toString();
                     searchPopularMovies(searchQuery);
+                    searchLinearLayout.setVisibility(View.GONE);
                     return true;
                 }
                 return false;
             }
         });
 
-        searchQuery = "a";
+        popularButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchPopularMovies("popular");
+                searchLinearLayout.setVisibility(View.GONE);
+
+            }
+        });
+
+        upcomingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchPopularMovies("upcoming");
+                searchLinearLayout.setVisibility(View.GONE);
+
+            }
+        });
+
+        searchQuery = "popular";
         searchPopularMovies(searchQuery);
 
 
@@ -93,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<TmdbResponse> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "error happen ", Toast.LENGTH_LONG).show();
             }
-        });
+        }, searchParam);
 
     }
 

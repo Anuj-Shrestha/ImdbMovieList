@@ -40,9 +40,9 @@ public class RetrofitManager {
         return retrofitManager;
     }
 
-    public static void getPopularMovies(Callback<TmdbResponse> getMovieListingCallBack) {
+    public static void getPopularMovies(Callback<TmdbResponse> getMovieListingCallBack, String searchParam) {
 
-        Call<TmdbResponse> getMovieListing = movieListingService.tmdbPopularMovies();
+        Call<TmdbResponse> getMovieListing = movieListingService.tmdbPopularMovies(searchParam);
         getMovieListing.enqueue(getMovieListingCallBack);
 
     }

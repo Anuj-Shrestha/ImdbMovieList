@@ -53,10 +53,10 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.View
         Results item = values.get(position);
         movieItem = item;
         String message = item.getTitle();
-        String yearReleased = item.getYear();
+        String vote = item.getVote();
 
         holder.textView.setText(message);
-        holder.year.setText(yearReleased);
+        holder.year.setText(vote);
         Glide.with(context)
                 .load("http://image.tmdb.org/t/p/w185/" + item.getPoster())
                 .listener(new RequestListener<String, GlideDrawable>() {

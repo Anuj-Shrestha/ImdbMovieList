@@ -12,8 +12,8 @@ import retrofit2.http.Query;
  */
 
 public interface TmdbClient {
-    @GET("discover/movie?api_key=419cfaa5f394ab7893b5ff4a074e3d83")
-    Call<TmdbResponse> tmdbPopularMovies();
+    @GET("movie/{category}?api_key=419cfaa5f394ab7893b5ff4a074e3d83")
+    Call<TmdbResponse> tmdbPopularMovies(@Path("category") String category);
 
     @GET("movie/{id}/videos?api_key=419cfaa5f394ab7893b5ff4a074e3d83")
     Call<TmdbResponse> tmdbSelectedMovie(@Path("id") String id);
