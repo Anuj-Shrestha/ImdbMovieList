@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MovieDetailActivity" />
-        <activity android:name=".CollapsableExampleActivity"></activity>
+        <activity android:name=".CollapsableExampleActivity" />
+        <activity android:name=".LifecycleExampleActivity"></activity>
     </application>
 
 </manifest>
