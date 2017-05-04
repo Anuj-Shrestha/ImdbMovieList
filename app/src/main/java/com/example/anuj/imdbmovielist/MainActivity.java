@@ -1,6 +1,5 @@
 package com.example.anuj.imdbmovielist;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ImdbContract.View {
 
     private ImageButton imageButton;
     private EditText editText;
@@ -31,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout spinnerRelativeLayout;
     private Button popularButton, upcomingButton;
     private LinearLayout searchLinearLayout;
+
+    private ImdbMainPresenter imdbMainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +52,13 @@ public class MainActivity extends AppCompatActivity {
         upcomingButton = (Button) findViewById(R.id.button_upcoming);
         searchLinearLayout = (LinearLayout) findViewById(R.id.linearLayout_search);
 
+        imdbMainPresenter = new ImdbMainPresenter();
+        imdbMainPresenter.setMainActivityView(this);
+
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchLinearLayout.setVisibility(View.VISIBLE);
+                imdbMainPresenter.onShowSearchBox();
             }
         });
 
@@ -65,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Perform action on key press
                     searchQuery = editText.getText().toString();
-                    searchPopularMovies(searchQuery);
-                    searchLinearLayout.setVisibility(View.GONE);
+                    imdbMainPresenter.searchMovies(searchQuery);
+                    imdbMainPresenter.onRemoveSearchBox();
+
                     return true;
                 }
                 return false;
@@ -76,8 +81,9 @@ public class MainActivity extends AppCompatActivity {
         popularButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchPopularMovies("popular");
-                searchLinearLayout.setVisibility(View.GONE);
+//                searchMovies("popular");
+                imdbMainPresenter.searchMovies("popular");
+                imdbMainPresenter.onRemoveSearchBox();
 
             }
         });
@@ -85,41 +91,41 @@ public class MainActivity extends AppCompatActivity {
         upcomingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchPopularMovies("upcoming");
-                searchLinearLayout.setVisibility(View.GONE);
+//                searchMovies("upcoming");
+                imdbMainPresenter.searchMovies("upcoming");
+                imdbMainPresenter.onRemoveSearchBox();
 
             }
         });
 
         searchQuery = "popular";
-        searchPopularMovies(searchQuery);
+        searchMovies(searchQuery);
 
 
     }
 
-    public void searchPopularMovies(String searchParam) {
+    public void showSearchBox() {
+        searchLinearLayout.setVisibility(View.VISIBLE);
+    }
 
-        RetrofitManager.getInstance().getPopularMovies(new Callback<TmdbResponse>() {
-            @Override
-            public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
-                spinnerRelativeLayout.setVisibility(View.GONE);
+    public void removeSearchBox() {
+        searchLinearLayout.setVisibility(View.GONE);
+    }
 
-                if (response.code() == 200) {
-                    ArrayList<Results> movies = new ArrayList(response.body().getResults());
-                    myMovies = movies;
-                    movieListAdapter.setValues(movies);
+    public void removeSpinner() {
+        spinnerRelativeLayout.setVisibility(View.GONE);
+    }
 
-                }else{
-                    Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
-                }
-            }
+    public void setMovieListAdapterData(ArrayList<Results> movies) {
+        movieListAdapter.setValues(movies);
+    }
 
-            @Override
-            public void onFailure(Call<TmdbResponse> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "error happen ", Toast.LENGTH_LONG).show();
-            }
-        }, searchParam);
+    public void displayErrorMessage(String errorMessage) {
+        Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
 
+    public void searchMovies(String searchParam) {
+        imdbMainPresenter.searchMovies(searchParam);
     }
 
 }
