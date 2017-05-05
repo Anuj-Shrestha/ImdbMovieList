@@ -15,10 +15,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class MainActivity extends AppCompatActivity implements ImdbContract.View {
 
     private ImageButton imageButton;
@@ -52,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
         upcomingButton = (Button) findViewById(R.id.button_upcoming);
         searchLinearLayout = (LinearLayout) findViewById(R.id.linearLayout_search);
 
-        imdbMainPresenter = new ImdbMainPresenter(new MockImdbInteractor());
-        imdbMainPresenter.setMainActivityView(this);
+        imdbMainPresenter = new ImdbMainPresenter(new ImdbSearchModal());
+        imdbMainPresenter.setImdbiView(this);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override

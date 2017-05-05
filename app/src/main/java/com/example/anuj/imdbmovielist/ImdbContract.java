@@ -18,7 +18,7 @@ public interface ImdbContract {
 
     interface Presenter {
         void searchMovies(String searchQuery);
-        void setMainActivityView(ImdbContract.View imdbView);
+        void setImdbiView(ImdbContract.View imdbView);
         void onShowSearchBox();
         void onRemoveSearchBox();
     }

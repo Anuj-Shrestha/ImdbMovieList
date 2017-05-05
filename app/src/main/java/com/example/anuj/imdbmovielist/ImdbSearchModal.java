@@ -10,7 +10,7 @@ import retrofit2.Response;
  * Created by anuj on 5/5/17.
  */
 
-public class MockImdbInteractor implements ImdbInteractor {
+public class ImdbSearchModal implements ImdbInteractor {
     private SearchMovieCallback searchMovieCallback;
 
     @Override
@@ -20,21 +20,21 @@ public class MockImdbInteractor implements ImdbInteractor {
         RetrofitManager.getInstance().getPopularMovies(new Callback<TmdbResponse>() {
             @Override
             public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
-                searchMovieCallback.removeSpinner();
+//                searchMovieCallback.removeSpinner();
 
                 if (response.code() == 200) {
                     ArrayList<Results> movies = new ArrayList(response.body().getResults());
+                    searchMovieCallback.onSuccess(movies);
 
-                    searchMovieCallback.setMovieListAdapterData(movies);
 
                 }else{
-                    searchMovieCallback.displayErrorMessage(response.message());
+                    searchMovieCallback.onFailure(response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<TmdbResponse> call, Throwable t) {
-                searchMovieCallback.displayErrorMessage("Error has occured");
+                searchMovieCallback.onFailure("Error has occured");
             }
         }, searchQuerry);
     }

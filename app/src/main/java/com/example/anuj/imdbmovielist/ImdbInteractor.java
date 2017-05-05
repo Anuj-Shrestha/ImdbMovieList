@@ -12,9 +12,10 @@ public interface ImdbInteractor {
     void searchMovies(String searchQuerry, SearchMovieCallback searchMovieCallback);
 
     interface SearchMovieCallback {
-        void removeSpinner();
-        void setMovieListAdapterData(ArrayList<Results> movies);
-        void displayErrorMessage(String errorMessage);
-        void onCancelled();
+        void onSuccess(ArrayList<Results> movies);
+        void onFailure(String errorMessage);
+//        void removeSpinner();
+//        void setMovieListAdapterData(ArrayList<Results> movies);
+//        void displayErrorMessage(String errorMessage);
     }
 }

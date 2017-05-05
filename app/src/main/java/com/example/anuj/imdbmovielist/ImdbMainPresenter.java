@@ -18,7 +18,7 @@ public class ImdbMainPresenter implements ImdbContract.Presenter {
 
 
 
-    public void setMainActivityView(ImdbContract.View ImdbView) {
+    public void setImdbiView(ImdbContract.View ImdbView) {
         this.imdbView = ImdbView;
     }
 
@@ -38,23 +38,15 @@ public class ImdbMainPresenter implements ImdbContract.Presenter {
     public class SearchCallbackImplementation implements ImdbInteractor.SearchMovieCallback {
 
         @Override
-        public void removeSpinner() {
+        public void onSuccess(ArrayList<Results> movies) {
             imdbView.removeSpinner();
-
-        }
-
-        @Override
-        public void setMovieListAdapterData(ArrayList<Results> movies) {
             imdbView.setMovieListAdapterData(movies);
         }
 
         @Override
-        public void displayErrorMessage(String errorMessage) {
+        public void onFailure(String errorMessage) {
+            imdbView.removeSpinner();
             imdbView.displayErrorMessage("Error has occured");
-        }
-
-        @Override
-        public void onCancelled() {
         }
     }
 
