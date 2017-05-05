@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
     private Button popularButton, upcomingButton;
     private LinearLayout searchLinearLayout;
 
-    private ImdbMainPresenter imdbMainPresenter;
+    private ImdbContract.Presenter imdbMainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
         upcomingButton = (Button) findViewById(R.id.button_upcoming);
         searchLinearLayout = (LinearLayout) findViewById(R.id.linearLayout_search);
 
-        imdbMainPresenter = new ImdbMainPresenter();
+        imdbMainPresenter = new ImdbMainPresenter(new MockImdbInteractor());
         imdbMainPresenter.setMainActivityView(this);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
         popularButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                searchMovies("popular");
                 imdbMainPresenter.searchMovies("popular");
                 imdbMainPresenter.onRemoveSearchBox();
 
@@ -91,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
         upcomingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                searchMovies("upcoming");
                 imdbMainPresenter.searchMovies("upcoming");
                 imdbMainPresenter.onRemoveSearchBox();
 

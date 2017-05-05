@@ -14,6 +14,12 @@ public interface ImdbContract {
         void removeSpinner();
         void setMovieListAdapterData(ArrayList<Results> movies);
         void displayErrorMessage(String message);
-//        void searchMovies();
+    }
+
+    interface Presenter {
+        void searchMovies(String searchQuery);
+        void setMainActivityView(ImdbContract.View imdbView);
+        void onShowSearchBox();
+        void onRemoveSearchBox();
     }
 }
