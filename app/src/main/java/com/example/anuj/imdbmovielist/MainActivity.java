@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
         upcomingButton = (Button) findViewById(R.id.button_upcoming);
         searchLinearLayout = (LinearLayout) findViewById(R.id.linearLayout_search);
 
-        imdbMainPresenter = new ImdbMainPresenter(new ImdbSearchModal());
+        imdbMainPresenter = new ImdbMainPresenter(new ImdbSearchManager());
         imdbMainPresenter.setImdbiView(this);
 
         imageButton.setOnClickListener(new View.OnClickListener() {

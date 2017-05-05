@@ -14,8 +14,5 @@ public interface ImdbInteractor {
     interface SearchMovieCallback {
         void onSuccess(ArrayList<Results> movies);
         void onFailure(String errorMessage);
-//        void removeSpinner();
-//        void setMovieListAdapterData(ArrayList<Results> movies);
-//        void displayErrorMessage(String errorMessage);
     }
 }

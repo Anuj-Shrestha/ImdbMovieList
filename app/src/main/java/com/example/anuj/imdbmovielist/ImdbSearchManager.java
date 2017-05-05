@@ -10,7 +10,7 @@ import retrofit2.Response;
  * Created by anuj on 5/5/17.
  */
 
-public class ImdbSearchModal implements ImdbInteractor {
+public class ImdbSearchManager implements ImdbInteractor {
     private SearchMovieCallback searchMovieCallback;
 
     @Override
@@ -20,7 +20,6 @@ public class ImdbSearchModal implements ImdbInteractor {
         RetrofitManager.getInstance().getPopularMovies(new Callback<TmdbResponse>() {
             @Override
             public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
-//                searchMovieCallback.removeSpinner();
 
                 if (response.code() == 200) {
                     ArrayList<Results> movies = new ArrayList(response.body().getResults());
