@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">IMDB Movie List</string>
+    <string name="searchCategory_popular">popular</string>
+    <string name="searchCategory_upcoming">upcoming</string>
+    <string name="youtubeInitialize_fail">There was an error initializing the YouTubePlayer (%1$s)</string>
+    <string name="releasedDate">Released Date: </string>
+    <string name="id">ID: </string>
+    <string name="imdb_movie_list">IMDB Movie List!</string>
+    <string name="enter_search_query_movie_title">Enter search query (Movie Title)</string>
+    <string name="popular">Popular</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="imdb_id">Imdb Id</string>
+    <string name="released_date">Released Date</string>
+    <string name="movie">Movie</string>
+    <string name="youtube_trailers">Youtube Trailers:</string>
+    <string name="movie_detail">Movie Detail</string>
 </resources>

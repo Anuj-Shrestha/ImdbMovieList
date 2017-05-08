@@ -59,7 +59,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:paddingBottom="8dp"
-                android:text="Movie Detail"
+                android:text="@string/movie_detail"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -115,7 +115,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="8dp"
-                        android:text="Movie" />
+                        android:text="@string/movie" />
 
                     <RatingBar
                         android:id="@+id/ratingBar_movieRating"
@@ -132,14 +132,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="8dp"
-                        android:text="Year" />
+                        android:text="@string/released_date" />
 
                     <TextView
                         android:id="@+id/textview_imdbid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="8dp"
-                        android:text="Imdb Id" />
+                        android:text="@string/imdb_id" />
 
                 </LinearLayout>
 
@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="4dp"
                 android:paddingTop="8dp"
-                android:text="Youtube Trailers:" />
+                android:text="@string/youtube_trailers" />
 
             <fragment
                 android:id="@+id/fragment_youtubePlayer"

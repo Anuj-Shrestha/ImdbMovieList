@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+/**
+ * Homepage activity, displays list of popular movies
+ */
 public class MainActivity extends AppCompatActivity implements ImdbContract.View {
 
     private ImageButton imageButton;
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
         popularButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imdbMainPresenter.searchMovies("popular");
+                imdbMainPresenter.searchMovies(getString(R.string.searchCategory_popular));
                 imdbMainPresenter.onRemoveSearchBox();
 
             }
@@ -86,13 +89,13 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
         upcomingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imdbMainPresenter.searchMovies("upcoming");
+                imdbMainPresenter.searchMovies(getString(R.string.searchCategory_upcoming));
                 imdbMainPresenter.onRemoveSearchBox();
 
             }
         });
 
-        searchQuery = "popular";
+        searchQuery = getString(R.string.searchCategory_popular);
         searchMovies(searchQuery);
 
 

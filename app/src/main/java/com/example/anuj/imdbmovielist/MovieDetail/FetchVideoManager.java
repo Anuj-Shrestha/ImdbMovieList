@@ -1,5 +1,7 @@
 package com.example.anuj.imdbmovielist.MovieDetail;
 
+import android.util.Log;
+
 import com.example.anuj.imdbmovielist.Results;
 import com.example.anuj.imdbmovielist.RetrofitManager;
 import com.example.anuj.imdbmovielist.TmdbResponse;
@@ -12,6 +14,7 @@ import retrofit2.Response;
 
 /**
  * Created by anuj on 5/8/17.
+ * Manager that calls video list api and sends back data to presenter.
  */
 
 public class FetchVideoManager implements MovieDetailInteractor {
@@ -33,12 +36,14 @@ public class FetchVideoManager implements MovieDetailInteractor {
 
                 } else {
                     fetchVideosCallback.onFailure(response.message());
+                    Log.e("Exception found ", response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<TmdbResponse> call, Throwable t) {
                 fetchVideosCallback.onFailure("Unable to fetch videos");
+                Log.e("Exception found ", "Unable to fetch videos");
             }
         }, id);
     }

@@ -17,6 +17,7 @@ import java.util.Date;
 
 /**
  * Created by anuj on 5/4/17.
+ * Presenter to manage views, business logic and api calls.
  */
 
 public class MovieDetailPresenter implements MovieDetailContract.Presenter {
@@ -88,6 +89,9 @@ public class MovieDetailPresenter implements MovieDetailContract.Presenter {
         movieDetailInteractor.fetchVideos(id, backDropUri, fetchVideosCallback);
     }
 
+    /**
+     * Implements callbacks fro fetch videos method.
+     */
     public class FetchVideosCallbackImplementation implements MovieDetailInteractor.FetchVideosCallback {
 
         @Override

@@ -23,6 +23,9 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.ArrayList;
 
+/**
+ * Displays movie detail and youtube trailers.
+ */
 public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDetailContract.View, YouTubePlayer.OnInitializedListener, VideoListAdapter.ItemClickListener {
     TextView titleTextView, movieTypeTextView, yearTextView, imdbIdTextView;
     ImageView posterImageView, miniPosterImageView;
@@ -81,7 +84,7 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
         movieDetailPresenter.applyFormatedReleasedDate(clickedMovie.getYear());
 
         movieTypeTextView.setText(clickedMovie.getOverview());
-        imdbIdTextView.setText("ID: " + clickedMovie.getId());
+        imdbIdTextView.setText(getString(R.string.id) + clickedMovie.getId());
         mRatingBar.setRating(Float.parseFloat(clickedMovie.getVote()));
 
         movieDetailPresenter.fetchVideos(clickedMovie.getId(), clickedMovie.getBackdrop());
@@ -115,9 +118,9 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
             youTubeInitializationResult.getErrorDialog(this, RECOVERY_DIALOG_REQUEST).show();
         } else {
             String errorMessage = String.format(
-                    "There was an error initializing the YouTubePlayer (%1$s)",
+                    getString(R.string.youtubeInitialize_fail),
                     youTubeInitializationResult.toString());
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            showErrorMessage(errorMessage);
         }
     }
 
@@ -149,7 +152,7 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
 
     @Override
     public void applyFormatedReleasedDate(String releasedDate) {
-        yearTextView.setText("Released Date: " + releasedDate);
+        yearTextView.setText(getString(R.string.releasedDate) + releasedDate);
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 /**
  * Created by anuj on 5/4/17.
+ * Presenter for managing main view, logics and api call.
  */
 
 public class ImdbMainPresenter implements ImdbContract.Presenter {
@@ -35,6 +36,9 @@ public class ImdbMainPresenter implements ImdbContract.Presenter {
         imdbInteractor.searchMovies(searchQuery, searchMovieCallback);
     }
 
+    /**
+     * Implements callbacks for search movies method.
+     */
     public class SearchCallbackImplementation implements ImdbInteractor.SearchMovieCallback {
 
         @Override
