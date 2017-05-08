@@ -28,18 +28,15 @@ public class ImdbSearchManager implements ImdbInteractor {
                     ArrayList<Results> movies = new ArrayList(response.body().getResults());
                     searchMovieCallback.onSuccess(movies);
 
-
-
-                }else{
+                } else {
                     searchMovieCallback.onFailure(response.message());
-                    Log.e("Exception found ", response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<TmdbResponse> call, Throwable t) {
                 searchMovieCallback.onFailure("Error has occured");
-                Log.e("Exception found ", "Unable to fetch videos");
+                Log.e("Exception found ", t.getLocalizedMessage());
             }
         }, searchQuerry);
     }

@@ -36,14 +36,13 @@ public class FetchVideoManager implements MovieDetailInteractor {
 
                 } else {
                     fetchVideosCallback.onFailure(response.message());
-                    Log.e("Exception found ", response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<TmdbResponse> call, Throwable t) {
                 fetchVideosCallback.onFailure("Unable to fetch videos");
-                Log.e("Exception found ", "Unable to fetch videos");
+                Log.e("Exception found ", t.getLocalizedMessage());
             }
         }, id);
     }
