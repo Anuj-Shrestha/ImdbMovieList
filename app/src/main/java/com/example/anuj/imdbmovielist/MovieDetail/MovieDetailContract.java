@@ -21,22 +21,22 @@ public interface MovieDetailContract {
 
         void applyFormatedReleasedDate(String releasedDate);
 
-        void loadYoutubeVideo();
-
-        void setVideosToAdapter(ArrayList<Results> videos, String backDropUri);
-
         void showErrorMessage(String errorMessage);
 
-        void cueYoutubeVideo(String videoId);
+        void setVideosToAdapter(ArrayList<Results> vidoes, String backDropUri);
 
-        boolean checkValidYoutubePlayer();
+        void loadVideo (String videoId);
     }
 
     interface Presenter {
         void setMovieDetailView(MovieDetailContract.View movieDetailView);
+
         void showMainPoster(Context context, String mainPoster, ImageView posterImageView);
+
         void showTitlePoster(Context context, String titlePoster, ImageView miniPosterImageView);
+
         void applyFormatedReleasedDate(String tmdbReleaseDate);
-        void fetchMovieDetail(String id, String backDropUri);
+
+        void fetchVideos(String id, String backDropUri);
     }
 }

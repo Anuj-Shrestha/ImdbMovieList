@@ -67,12 +67,11 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
         recyclerView.setAdapter(videoListAdapter);
         videoListAdapter.setClickListener(this);
 
-        movieDetailPresenter = new MovieDetailPresenter();
-
+        movieDetailPresenter = new MovieDetailPresenter(new FetchVideoManager());
+        movieDetailPresenter.setMovieDetailView(this);
 
         Results clickedMovie = getIntent().getParcelableExtra("MovieDetailActivity");
 
-        movieDetailPresenter.setMovieDetailView(this);
         movieDetailPresenter.showMainPoster(this, clickedMovie.getBackdrop(), posterImageView);
 
         titleTextView.setText(clickedMovie.getTitle());
@@ -85,7 +84,7 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
         imdbIdTextView.setText("ID: " + clickedMovie.getId());
         mRatingBar.setRating(Float.parseFloat(clickedMovie.getVote()));
 
-        movieDetailPresenter.fetchMovieDetail(clickedMovie.getId(), clickedMovie.getBackdrop());
+        movieDetailPresenter.fetchVideos(clickedMovie.getId(), clickedMovie.getBackdrop());
 
     }
 
@@ -154,8 +153,8 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
     }
 
     @Override
-    public void loadYoutubeVideo() {
-        myYouTubePlayerFragment.initialize(DEVELOPER_KEY, MovieDetailActivity.this);
+    public void showErrorMessage(String errorMessage) {
+        Toast.makeText(MovieDetailActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -164,19 +163,12 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
     }
 
     @Override
-    public void showErrorMessage(String errorMessage) {
-        Toast.makeText(MovieDetailActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void cueYoutubeVideo(String videoId) {
-        myYoutubePlayer.cueVideo(videoId);
-    }
-
-    @Override
-    public boolean checkValidYoutubePlayer() {
+    public void loadVideo(String videoId) {
         if (myYoutubePlayer == null) {
-            return false;
-        } else { return true; }
+            this.videoId = videoId;
+            myYouTubePlayerFragment.initialize(DEVELOPER_KEY, MovieDetailActivity.this);
+        } else {
+            myYoutubePlayer.cueVideo(videoId);
+        }
     }
 }

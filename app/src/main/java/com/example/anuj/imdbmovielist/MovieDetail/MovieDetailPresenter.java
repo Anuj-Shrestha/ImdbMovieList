@@ -1,29 +1,19 @@
 package com.example.anuj.imdbmovielist.MovieDetail;
 
 import android.content.Context;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.anuj.imdbmovielist.Results;
-import com.example.anuj.imdbmovielist.RetrofitManager;
-import com.example.anuj.imdbmovielist.TmdbResponse;
-import com.google.android.youtube.player.YouTubePlayer;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by anuj on 5/4/17.
@@ -32,7 +22,12 @@ import retrofit2.Response;
 public class MovieDetailPresenter implements MovieDetailContract.Presenter {
 
     private MovieDetailContract.View movieDetailView;
-    public MovieDetailPresenter ( ){
+    private MovieDetailInteractor movieDetailInteractor;
+    private FetchVideoManager.FetchVideosCallback fetchVideosCallback;
+
+    public MovieDetailPresenter(MovieDetailInteractor movieDetailInteractor) {
+        this.movieDetailInteractor = movieDetailInteractor;
+        this.fetchVideosCallback = new FetchVideosCallbackImplementation();
     }
 
     public void setMovieDetailView(MovieDetailContract.View movieDetailView) {
@@ -89,30 +84,21 @@ public class MovieDetailPresenter implements MovieDetailContract.Presenter {
         }
     }
 
-    public void fetchMovieDetail(String id, final String backDropUri) {
-        RetrofitManager.getInstance().getMovieDetail(new Callback<TmdbResponse>() {
-            @Override
-            public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
+    public void fetchVideos(String id, String backDropUri) {
+        movieDetailInteractor.fetchVideos(id, backDropUri, fetchVideosCallback);
+    }
 
-                if (response.code() == 200) {
-                    ArrayList<Results> vidoes = new ArrayList(response.body().getResults());
-                    String videoId = vidoes.get(0).getKey();
-                    if(!movieDetailView.checkValidYoutubePlayer()) {
-                        movieDetailView.loadYoutubeVideo();
-                    } else {
-                        movieDetailView.cueYoutubeVideo(videoId);
-                    }
-                    movieDetailView.setVideosToAdapter(vidoes, backDropUri);
+    public class FetchVideosCallbackImplementation implements MovieDetailInteractor.FetchVideosCallback {
 
-                } else {
-                    movieDetailView.showErrorMessage(response.message());
-                }
-            }
+        @Override
+        public void onSuccess(ArrayList<Results> videos, String backDropUri, String videoId) {
+            movieDetailView.setVideosToAdapter(videos, backDropUri);
+            movieDetailView.loadVideo(videoId);
+        }
 
-            @Override
-            public void onFailure(Call<TmdbResponse> call, Throwable t) {
-                movieDetailView.showErrorMessage("error has occured ");
-            }
-        }, id);
+        @Override
+        public void onFailure(String errorMessage) {
+            movieDetailView.showErrorMessage(errorMessage);
+        }
     }
 }
