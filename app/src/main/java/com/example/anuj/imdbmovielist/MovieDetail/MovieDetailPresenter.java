@@ -29,15 +29,13 @@ import retrofit2.Response;
  * Created by anuj on 5/4/17.
  */
 
-public class MovieDetailPresenter {
+public class MovieDetailPresenter implements MovieDetailContract.Presenter {
 
-    private MovieDetailContract movieDetailView;
+    private MovieDetailContract.View movieDetailView;
     public MovieDetailPresenter ( ){
     }
 
-
-
-    public void setMovieDetailView(MovieDetailContract movieDetailView) {
+    public void setMovieDetailView(MovieDetailContract.View movieDetailView) {
         this.movieDetailView = movieDetailView;
     }
 
@@ -91,7 +89,7 @@ public class MovieDetailPresenter {
         }
     }
 
-    public void fetchMovieDetail(String id, final String backDropUri, final YouTubePlayer myYoutubePlayer) {
+    public void fetchMovieDetail(String id, final String backDropUri) {
         RetrofitManager.getInstance().getMovieDetail(new Callback<TmdbResponse>() {
             @Override
             public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
@@ -99,9 +97,8 @@ public class MovieDetailPresenter {
                 if (response.code() == 200) {
                     ArrayList<Results> vidoes = new ArrayList(response.body().getResults());
                     String videoId = vidoes.get(0).getKey();
-                    if (myYoutubePlayer == null) {
+                    if(!movieDetailView.checkValidYoutubePlayer()) {
                         movieDetailView.loadYoutubeVideo();
-
                     } else {
                         movieDetailView.cueYoutubeVideo(videoId);
                     }

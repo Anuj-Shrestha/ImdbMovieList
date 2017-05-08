@@ -23,7 +23,7 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.ArrayList;
 
-public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDetailContract, YouTubePlayer.OnInitializedListener, VideoListAdapter.ItemClickListener {
+public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDetailContract.View, YouTubePlayer.OnInitializedListener, VideoListAdapter.ItemClickListener {
     TextView titleTextView, movieTypeTextView, yearTextView, imdbIdTextView;
     ImageView posterImageView, miniPosterImageView;
     RelativeLayout spinnerRelativeLayout, miniPosterSpinnerRL;
@@ -40,7 +40,7 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
 
     YouTubePlayerFragment myYouTubePlayerFragment;
 
-    private MovieDetailPresenter movieDetailPresenter;
+    private MovieDetailContract.Presenter movieDetailPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
         imdbIdTextView.setText("ID: " + clickedMovie.getId());
         mRatingBar.setRating(Float.parseFloat(clickedMovie.getVote()));
 
-        movieDetailPresenter.fetchMovieDetail(clickedMovie.getId(), clickedMovie.getBackdrop(), myYoutubePlayer);
+        movieDetailPresenter.fetchMovieDetail(clickedMovie.getId(), clickedMovie.getBackdrop());
 
     }
 
@@ -171,5 +171,12 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
     @Override
     public void cueYoutubeVideo(String videoId) {
         myYoutubePlayer.cueVideo(videoId);
+    }
+
+    @Override
+    public boolean checkValidYoutubePlayer() {
+        if (myYoutubePlayer == null) {
+            return false;
+        } else { return true; }
     }
 }

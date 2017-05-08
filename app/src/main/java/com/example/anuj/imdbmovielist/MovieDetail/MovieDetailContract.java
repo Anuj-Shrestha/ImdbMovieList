@@ -1,6 +1,10 @@
 package com.example.anuj.imdbmovielist.MovieDetail;
 
+import android.content.Context;
+import android.widget.ImageView;
+
 import com.example.anuj.imdbmovielist.Results;
+import com.google.android.youtube.player.YouTubePlayer;
 
 import java.util.ArrayList;
 
@@ -9,21 +13,30 @@ import java.util.ArrayList;
  */
 
 public interface MovieDetailContract {
-    void removeSpinner();
 
-    void removeMiniSpinner();
+    interface View {
+        void removeSpinner();
 
-    void applyFormatedReleasedDate(String releasedDate);
+        void removeMiniSpinner();
 
-    void loadYoutubeVideo();
+        void applyFormatedReleasedDate(String releasedDate);
 
-    void setVideosToAdapter(ArrayList<Results> videos, String backDropUri);
+        void loadYoutubeVideo();
 
-    void showErrorMessage(String errorMessage);
+        void setVideosToAdapter(ArrayList<Results> videos, String backDropUri);
 
-    void cueYoutubeVideo(String videoId);
-//    public interface View {
-////        setMovieDetailView(MovieDetailContract movieDetailContract);
-//
-//    }
+        void showErrorMessage(String errorMessage);
+
+        void cueYoutubeVideo(String videoId);
+
+        boolean checkValidYoutubePlayer();
+    }
+
+    interface Presenter {
+        void setMovieDetailView(MovieDetailContract.View movieDetailView);
+        void showMainPoster(Context context, String mainPoster, ImageView posterImageView);
+        void showTitlePoster(Context context, String titlePoster, ImageView miniPosterImageView);
+        void applyFormatedReleasedDate(String tmdbReleaseDate);
+        void fetchMovieDetail(String id, String backDropUri);
+    }
 }
