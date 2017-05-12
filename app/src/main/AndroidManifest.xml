@@ -20,8 +20,6 @@
         </activity>
         <activity android:name=".MovieDetail.MovieDetailActivity"
             android:screenOrientation="locked"/>
-        <activity android:name=".CollapsableExampleActivity" />
-        <activity android:name=".LifecycleExampleActivity"></activity>
     </application>
 
 </manifest>
