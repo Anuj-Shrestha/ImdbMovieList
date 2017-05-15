@@ -19,6 +19,7 @@ import dagger.Provides;
 
 @Module
 public class PresenterModule {
+
     @Provides
     ImdbContract.Presenter provideImdbMainPresenter(ImdbInteractor imdbInteractor) {
         return new ImdbMainPresenter(imdbInteractor);

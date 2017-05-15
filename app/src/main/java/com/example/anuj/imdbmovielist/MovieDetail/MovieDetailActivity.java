@@ -76,7 +76,6 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
         recyclerView.setAdapter(videoListAdapter);
         videoListAdapter.setClickListener(this);
 
-//        movieDetailPresenter = new MovieDetailPresenter(new FetchVideoManager());
         ((ImdbMovieListApplication)getApplication()).getApplicationComponent().inject(this);
         movieDetailPresenter.setMovieDetailView(this);
 

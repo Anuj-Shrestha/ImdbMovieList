@@ -1,13 +1,7 @@
 package com.example.anuj.imdbmovielist.di;
 
-import android.app.Application;
-import android.content.Context;
-
-import com.example.anuj.imdbmovielist.ImdbSearchManager;
 import com.example.anuj.imdbmovielist.MainActivity;
-import com.example.anuj.imdbmovielist.MovieDetail.FetchVideoManager;
 import com.example.anuj.imdbmovielist.MovieDetail.MovieDetailActivity;
-import com.example.anuj.imdbmovielist.MovieDetail.MovieDetailContract;
 
 import javax.inject.Singleton;
 

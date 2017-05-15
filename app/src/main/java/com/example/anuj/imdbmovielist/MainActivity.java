@@ -13,8 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.anuj.imdbmovielist.di.DaggerApplicationComponent;
-
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -102,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
 
         searchQuery = getString(R.string.searchCategory_popular);
         searchMovies(searchQuery);
-
 
     }
 
