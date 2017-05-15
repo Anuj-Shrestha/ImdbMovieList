@@ -13,7 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.anuj.imdbmovielist.di.DaggerApplicationComponent;
+
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * Homepage activity, displays list of popular movies
@@ -30,7 +34,8 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
     private Button popularButton, upcomingButton;
     private LinearLayout searchLinearLayout;
 
-    private ImdbContract.Presenter imdbMainPresenter;
+    @Inject
+    ImdbContract.Presenter imdbMainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
         upcomingButton = (Button) findViewById(R.id.button_upcoming);
         searchLinearLayout = (LinearLayout) findViewById(R.id.linearLayout_search);
 
-        imdbMainPresenter = new ImdbMainPresenter(new ImdbSearchManager());
+        ((ImdbMovieListApplication)getApplication()).getApplicationComponent().inject(this);
         imdbMainPresenter.setImdbiView(this);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -63,25 +68,25 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
 
         editText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Perform action on key press
-                    searchQuery = editText.getText().toString();
-                    imdbMainPresenter.searchMovies(searchQuery);
-                    imdbMainPresenter.onRemoveSearchBox();
+            // If the event is a key-down event on the "enter" button
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                // Perform action on key press
+                searchQuery = editText.getText().toString();
+                imdbMainPresenter.searchMovies(searchQuery);
+                imdbMainPresenter.onRemoveSearchBox();
 
-                    return true;
-                }
-                return false;
+                return true;
+            }
+            return false;
             }
         });
 
         popularButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imdbMainPresenter.searchMovies(getString(R.string.searchCategory_popular));
-                imdbMainPresenter.onRemoveSearchBox();
+            imdbMainPresenter.searchMovies(getString(R.string.searchCategory_popular));
+            imdbMainPresenter.onRemoveSearchBox();
 
             }
         });
@@ -89,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements ImdbContract.View
         upcomingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imdbMainPresenter.searchMovies(getString(R.string.searchCategory_upcoming));
-                imdbMainPresenter.onRemoveSearchBox();
+            imdbMainPresenter.searchMovies(getString(R.string.searchCategory_upcoming));
+            imdbMainPresenter.onRemoveSearchBox();
 
             }
         });

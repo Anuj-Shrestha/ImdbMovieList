@@ -5,8 +5,11 @@ import android.util.Log;
 import com.example.anuj.imdbmovielist.Results;
 import com.example.anuj.imdbmovielist.RetrofitManager;
 import com.example.anuj.imdbmovielist.TmdbResponse;
+import com.example.anuj.imdbmovielist.di.DaggerApplicationComponent;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,11 +24,17 @@ public class FetchVideoManager implements MovieDetailInteractor {
 
     private FetchVideosCallback fetchVideosCallback;
 
+    RetrofitManager retrofitManager;
+
+    public FetchVideoManager(RetrofitManager retrofitManager) {
+        this.retrofitManager = retrofitManager;
+    }
+
     @Override
     public void fetchVideos(String id, final String backDropUri, final FetchVideosCallback fetchVideosCallback) {
         this.fetchVideosCallback = fetchVideosCallback;
 
-        RetrofitManager.getInstance().getMovieDetail(new Callback<TmdbResponse>() {
+        retrofitManager.getMovieDetail(new Callback<TmdbResponse>() {
             @Override
             public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
 

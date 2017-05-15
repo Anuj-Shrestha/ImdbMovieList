@@ -2,6 +2,8 @@ package com.example.anuj.imdbmovielist;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 
 /**
  * Created by anuj on 5/4/17.
@@ -12,10 +14,15 @@ public class ImdbMainPresenter implements ImdbContract.Presenter {
     private ImdbContract.View imdbView;
     private ImdbInteractor imdbInteractor;
     private ImdbInteractor.SearchMovieCallback searchMovieCallback;
+
     public ImdbMainPresenter(ImdbInteractor imdbInteractor) {
         this.imdbInteractor = imdbInteractor;
         this.searchMovieCallback = new SearchCallbackImplementation();
     }
+//    public ImdbMainPresenter(ImdbInteractor imdbInteractor) {
+//        this.imdbInteractor = imdbInteractor;
+//        this.searchMovieCallback = new SearchCallbackImplementation();
+//    }
 
 
 

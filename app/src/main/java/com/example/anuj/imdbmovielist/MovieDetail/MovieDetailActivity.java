@@ -13,8 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.anuj.imdbmovielist.ImdbMovieListApplication;
 import com.example.anuj.imdbmovielist.R;
 import com.example.anuj.imdbmovielist.Results;
+import com.example.anuj.imdbmovielist.di.DaggerApplicationComponent;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -22,6 +24,8 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * Displays movie detail and youtube trailers.
@@ -43,7 +47,9 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
 
     YouTubePlayerFragment myYouTubePlayerFragment;
 
-    private MovieDetailContract.Presenter movieDetailPresenter;
+//    private MovieDetailContract.Presenter movieDetailPresenter;
+    @Inject
+    MovieDetailContract.Presenter movieDetailPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +76,8 @@ public class MovieDetailActivity extends YouTubeBaseActivity implements MovieDet
         recyclerView.setAdapter(videoListAdapter);
         videoListAdapter.setClickListener(this);
 
-        movieDetailPresenter = new MovieDetailPresenter(new FetchVideoManager());
+//        movieDetailPresenter = new MovieDetailPresenter(new FetchVideoManager());
+        ((ImdbMovieListApplication)getApplication()).getApplicationComponent().inject(this);
         movieDetailPresenter.setMovieDetailView(this);
 
         Results clickedMovie = getIntent().getParcelableExtra("MovieDetailActivity");

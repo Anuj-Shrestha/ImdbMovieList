@@ -2,7 +2,11 @@ package com.example.anuj.imdbmovielist;
 
 import android.util.Log;
 
+import com.example.anuj.imdbmovielist.di.DaggerApplicationComponent;
+
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,13 +18,20 @@ import retrofit2.Response;
  */
 
 public class ImdbSearchManager implements ImdbInteractor {
+
     private SearchMovieCallback searchMovieCallback;
+
+    RetrofitManager retrofitManager;
+
+    public ImdbSearchManager(RetrofitManager retrofitManager) {
+        this.retrofitManager = retrofitManager;
+    }
 
     @Override
     public void searchMovies(String searchQuerry, final SearchMovieCallback searchMovieCallback) {
         this.searchMovieCallback = searchMovieCallback;
 
-        RetrofitManager.getInstance().getPopularMovies(new Callback<TmdbResponse>() {
+        retrofitManager.getPopularMovies(new Callback<TmdbResponse>() {
             @Override
             public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
 

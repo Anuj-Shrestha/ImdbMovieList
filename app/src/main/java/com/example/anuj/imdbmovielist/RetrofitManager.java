@@ -17,25 +17,25 @@ public class RetrofitManager {
     public static RetrofitManager retrofitManager = null;
     private static String BASE_URL = "https://api.themoviedb.org/3/";
 
-    private RetrofitManager() {
+    private RetrofitManager(OkHttpClient okHttpClient) {
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .build();
+//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        OkHttpClient client = new OkHttpClient.Builder()
+//                .addInterceptor(interceptor)
+//                .build();
 
         retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
+                .client(okHttpClient)
                 .build();
 
         movieListingService = retrofit.create(TmdbClient.class);
     }
 
-    public static RetrofitManager getInstance() {
+    public static RetrofitManager getInstance(OkHttpClient okHttpClient) {
         if (retrofitManager == null) {
-            retrofitManager = new RetrofitManager();
+            retrofitManager = new RetrofitManager(okHttpClient);
         }
         return retrofitManager;
     }
