@@ -1,6 +1,5 @@
 package com.example.anuj.imdbmovielist;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,11 +15,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Homepage activity, displays list of popular movies
+ */
+public class MainActivity extends AppCompatActivity implements ImdbContract.View {
 
     private ImageButton imageButton;
     private EditText editText;
@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout spinnerRelativeLayout;
     private Button popularButton, upcomingButton;
     private LinearLayout searchLinearLayout;
+
+    @Inject
+    ImdbContract.Presenter imdbMainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,33 +54,37 @@ public class MainActivity extends AppCompatActivity {
         upcomingButton = (Button) findViewById(R.id.button_upcoming);
         searchLinearLayout = (LinearLayout) findViewById(R.id.linearLayout_search);
 
+        ((ImdbMovieListApplication)getApplication()).getApplicationComponent().inject(this);
+        imdbMainPresenter.setImdbiView(this);
+
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchLinearLayout.setVisibility(View.VISIBLE);
+                imdbMainPresenter.onShowSearchBox();
             }
         });
 
         editText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Perform action on key press
-                    searchQuery = editText.getText().toString();
-                    searchPopularMovies(searchQuery);
-                    searchLinearLayout.setVisibility(View.GONE);
-                    return true;
-                }
-                return false;
+            // If the event is a key-down event on the "enter" button
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                // Perform action on key press
+                searchQuery = editText.getText().toString();
+                imdbMainPresenter.searchMovies(searchQuery);
+                imdbMainPresenter.onRemoveSearchBox();
+
+                return true;
+            }
+            return false;
             }
         });
 
         popularButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchPopularMovies("popular");
-                searchLinearLayout.setVisibility(View.GONE);
+            imdbMainPresenter.searchMovies(getString(R.string.searchCategory_popular));
+            imdbMainPresenter.onRemoveSearchBox();
 
             }
         });
@@ -85,41 +92,39 @@ public class MainActivity extends AppCompatActivity {
         upcomingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchPopularMovies("upcoming");
-                searchLinearLayout.setVisibility(View.GONE);
+            imdbMainPresenter.searchMovies(getString(R.string.searchCategory_upcoming));
+            imdbMainPresenter.onRemoveSearchBox();
 
             }
         });
 
-        searchQuery = "popular";
-        searchPopularMovies(searchQuery);
-
+        searchQuery = getString(R.string.searchCategory_popular);
+        searchMovies(searchQuery);
 
     }
 
-    public void searchPopularMovies(String searchParam) {
+    public void showSearchBox() {
+        searchLinearLayout.setVisibility(View.VISIBLE);
+    }
 
-        RetrofitManager.getInstance().getPopularMovies(new Callback<TmdbResponse>() {
-            @Override
-            public void onResponse(Call<TmdbResponse> call, Response<TmdbResponse> response) {
-                spinnerRelativeLayout.setVisibility(View.GONE);
+    public void removeSearchBox() {
+        searchLinearLayout.setVisibility(View.GONE);
+    }
 
-                if (response.code() == 200) {
-                    ArrayList<Results> movies = new ArrayList(response.body().getResults());
-                    myMovies = movies;
-                    movieListAdapter.setValues(movies);
+    public void removeSpinner() {
+        spinnerRelativeLayout.setVisibility(View.GONE);
+    }
 
-                }else{
-                    Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
-                }
-            }
+    public void setMovieListAdapterData(ArrayList<Results> movies) {
+        movieListAdapter.setValues(movies);
+    }
 
-            @Override
-            public void onFailure(Call<TmdbResponse> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "error happen ", Toast.LENGTH_LONG).show();
-            }
-        }, searchParam);
+    public void displayErrorMessage(String errorMessage) {
+        Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
 
+    public void searchMovies(String searchParam) {
+        imdbMainPresenter.searchMovies(searchParam);
     }
 
 }
